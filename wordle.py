@@ -83,7 +83,15 @@ class WordleEnv(Env):
     ):
         super().reset()
 
-        self.answer = all_words.WORDS[default_rng().integers(low=0, high=3)]
+        # Generate a new random word from the list
+        words = all_words.WORDS
+        self.answer = words[default_rng().integers(low=0, high=len(words))]
+
+        observation = [0, 0, 0, 0, 0]
+        if return_info:
+            return observation, {}
+        else:
+            return observation
 
     def render(self, mode="human"):
 
@@ -106,3 +114,19 @@ class WordleEnv(Env):
             with closing(outfile):
                 return outfile.getvalue()
         return None
+
+    @staticmethod
+    def convert_word(word):
+        "Convert a string to an array of bytes, to be used as an action"
+        
+        action = []
+        for c in word:
+            action.append(np.cast["ubyte"](ord(c)))
+        return action
+
+    @staticmethod
+    def convert_action(action):
+        "Convert an action array to a string of ASCII characters"
+    
+        return bytes(action).decode()
+
