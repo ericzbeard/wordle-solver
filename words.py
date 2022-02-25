@@ -1,0 +1,5 @@
+def WORDS = [
+    "HELLO",
+    "WORLD"
+]
+
