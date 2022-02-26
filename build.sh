@@ -1,3 +1,3 @@
-pylint *.py
 black .
+pylint *.py
 
