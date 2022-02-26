@@ -35,7 +35,7 @@ state. Possible number of states are 3^5 = 243.
 
 There are 11,881,376 possible guesses, without any knowledge of English.
 
-My initial research led me to (https://github.com/openai/gym)[OpenAI Gym], which is 
+My initial research led me to [OpenAI Gym](https://github.com/openai/gym), which is 
 a framework for describing the problem that you want to solve. Check out the 
 `WordleEnv` class in `wordle.py` to see how the environment is set up. There's no 
 ML involved here yet, it's just a way for the learning algorithm to get the data it 
@@ -43,9 +43,15 @@ needs to train the model.
 
 ```Python
 observation, reward, done, info = env.step(action)
-````
+```
 
 That line of code is the primary function of an environment. Your algorithm makes an action, 
-in this case an array of letters, and it receives in return a observation of the environment ater that
-action. It also gets a reward or a penalty, depending on how well it did.
+in this case an array of letters, and it receives in return a observation of the environment ater that action. It also gets a reward or a penalty, depending on how well it did.
+
+## Tutorials and Documentation to read
+
+I found [this](https://www.learndatasci.com/tutorials/reinforcement-q-learning-scratch-python-openai-gym/) to be a good introduction to Gym, but it uses a pre-existing environment. There are not many detailed tutorials on how to actually create an Environment from scratch, so I spent some time reading the source code for [Taxi-v3](https://github.com/openai/gym/blob/master/gym/envs/toy_text/taxi.py).
+
+The documentation at [https://www.gymlibrary.ml/](https://www.gymlibrary.ml/) is a good start, but the site at (https://gym.openai.com/)[https://gym.openai.com/] is nearly useless.
+
 
