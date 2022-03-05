@@ -5,7 +5,8 @@ Wordle Gym Environment
 import sys
 from contextlib import closing
 from io import StringIO
-from typing import Optional
+# from typing import Optional
+from termcolor import colored
 
 import numpy as np
 from numpy.random import default_rng
@@ -62,6 +63,16 @@ class WordleEnv(Env):
 
         self.reset()
 
+    @staticmethod
+    def action_size():
+        "Number of possible actions"
+        return 26 * 26 * 26 * 26 * 26
+
+    @staticmethod
+    def observation_size():
+        "Number of possible observations"
+        return 3 * 3 * 3 * 3 * 3
+
     def set_answer(self, test):
         "Set a specific answer for testing"
         self.reset()
@@ -82,8 +93,8 @@ class WordleEnv(Env):
 
         guess = WordleEnv.convert_action(action)
         info["guess"] = guess
-        a = WordleEnv.convert_word(self.answer)
-        info["a"] = a
+        converted_answer = WordleEnv.convert_word(self.answer)
+        info["a"] = converted_answer
 
         if guess in WORDS:
 
@@ -99,13 +110,13 @@ class WordleEnv(Env):
                         "letter": self.answer[i],
                         "seen": False,
                         "position": i,
-                        "b": a[i],
+                        "b": converted_answer[i],
                     }
                 )
 
             # Check each letter in the guess to see if it's correct
             for i in range(5):
-                if a[i] == action[i]:
+                if converted_answer[i] == action[i]:
                     # The letter is in the correct location
                     observation[i] = 2
                     reward += CORRECT_LETTER
@@ -113,7 +124,9 @@ class WordleEnv(Env):
 
             # Now check for misplaced letters
             for i in range(5):
-                if a[i] != action[i] and WordleEnv.check_letter(action[i], letters):
+                if converted_answer[i] != action[i] and WordleEnv.check_letter(
+                    action[i], letters
+                ):
                     # The letter is in the word but in the wrong location
                     # We check the remaining letters to prevent double counting a repeat,
                     # for example, if the word is WORLD, and the guess is LLLLL, only count index 3
@@ -135,26 +148,58 @@ class WordleEnv(Env):
 
         return (observation, reward, done, info)
 
-    def reset(
-        self,
-        *,
-        seed: Optional[int] = None,
-        return_info: bool = False,
-        options: Optional[dict] = None,
-    ):
-        super().reset(seed=seed, return_info=return_info, options=options)
-
+    # def reset( # gym 0.22.0
+    #     self,
+    #     *,
+    #     seed: Optional[int] = None,
+    #     return_info: bool = False,
+    #     options: Optional[dict] = None,
+    # ):
+        #super().reset(seed=seed, return_info=return_info, options=options)
+    def reset(self):
         # Generate a new random word from the list
         words = WORDS
         self.answer = words[default_rng().integers(low=0, high=len(words))]
         self.last_step = WordleEnv.empty_step()
 
         observation = [0, 0, 0, 0, 0]
-        if return_info:
-            return observation, {}
+        # if return_info:
+        #     return observation, {}
         return observation
 
     def render(self, mode="human"):
+        "Render the current state"
+
+        outfile = StringIO() if mode == "ansi" else sys.stdout
+
+        # self.last_step = (action, observation, reward, done, info)
+        action = self.last_step[0]
+        guess = WordleEnv.convert_action(action)
+        observation = self.last_step[1]
+        text = ""
+        for i in range(5):
+            obs = observation[i]
+            if obs == 0:
+                text += colored(guess[i], "white", "on_grey")
+            if obs == 1:
+                text += colored(guess[i], "grey", "on_yellow")
+            if obs == 2:
+                text += colored(guess[i], "white", "on_green")
+        reward = self.last_step[2]
+        text += f" {reward}"
+        outfile.write(text)
+        #if not self.last_step[3]:
+        #    outfile.write("\r")
+        outfile.write("\n")
+
+        # No need to return anything for human
+        if mode != "human":
+            with closing(outfile):
+                return outfile.getvalue()
+        return None
+
+    def render_verbose(self, mode="human"):
+        "Render a verbose version of the current state"
 
         outfile = StringIO() if mode == "ansi" else sys.stdout
 
@@ -165,12 +210,12 @@ class WordleEnv(Env):
         observation = self.last_step[1]
         blocks = [BLACK for i in range(5)]
         for i in range(5):
-            o = observation[i]
-            if o == 0:
+            obs = observation[i]
+            if obs == 0:
                 blocks[i] = BLACK
-            if o == 1:
+            if obs == 1:
                 blocks[i] = YELLOW
-            if o == 2:
+            if obs == 2:
                 blocks[i] = GREEN
         reward = self.last_step[2]
 
@@ -191,8 +236,8 @@ class WordleEnv(Env):
         "Convert a string to an array of bytes, to be used as an action"
 
         action = []
-        for c in word:
-            action.append(ord(c) - 65)
+        for character in word:
+            action.append(ord(character) - 65)
             # action.append(np.cast["ubyte"](ord(c) - 65))
         return action
 
@@ -203,18 +248,18 @@ class WordleEnv(Env):
         if len(action) != 5:
             raise Exception("action must have 5 elements")
 
-        a = np.empty(5, dtype=np.ubyte)
+        converted = np.empty(5, dtype=np.ubyte)
         for i in range(5):
-            a[i] = action[i] + 65
+            converted[i] = action[i] + 65
 
-        return bytes(a).decode()
+        return bytes(converted).decode()
 
     @staticmethod
-    def check_letter(g, letters):
+    def check_letter(guessed, letters):
         "Returns true if the guessed letter is in the word and we haven't counted it already"
         for i in range(5):
             letter = letters[i]
-            if letter["b"] == g:
+            if letter["b"] == guessed:
                 if letter["seen"]:
                     return False
                 letter["seen"] = True
