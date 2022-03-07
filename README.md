@@ -84,12 +84,12 @@ of a truly random sample.
 
 I found [this](https://www.learndatasci.com/tutorials/reinforcement-q-learning-scratch-python-openai-gym/) to be a good introduction to Gym, but it uses a pre-existing environment. There are not many detailed tutorials on how to actually create an Environment from scratch, so I spent some time reading the source code for [Taxi-v3](https://github.com/openai/gym/blob/master/gym/envs/toy_text/taxi.py).
 
-The documentation at [https://www.gymlibrary.ml/](https://www.gymlibrary.ml/) is a good start, but the site at (https://gym.openai.com/)[https://gym.openai.com/] is nearly useless.
+The documentation at [https://www.gymlibrary.ml/](https://www.gymlibrary.ml/) is a good start, but the site at [https://gym.openai.com/](https://gym.openai.com/) is nearly useless.
 
 - [Stable Baselines](https://stable-baselines.readthedocs.io/en/master/)
 - [Reinforcement Learning w/ Keras + OpenAI: DQNs](https://towardsdatascience.com/reinforcement-learning-w-keras-openai-dqns-1eed3a5338c)
 - [Reinforcement Q-Learning from Scratch in Python with OpenAI Gym](https://www.learndatasci.com/tutorials/reinforcement-q-learning-scratch-python-openai-gym/)
-- [Reinforcement Q-Learning from Scratch in Python with OpenAI Gym](https://www.tensorflow.org/agents/tutorials/0_intro_rl)
+- [Tensorflow RL Tutorial](https://www.tensorflow.org/agents/tutorials/0_intro_rl)
 - [Reinforcement Learning algorithms — an intuitive overview](https://smartlabai.medium.com/reinforcement-learning-algorithms-an-intuitive-overview-904e2dff5bbc)
 
 
