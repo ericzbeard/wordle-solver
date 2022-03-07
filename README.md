@@ -2,7 +2,7 @@
 
 This is a study project to experiment with reinforcement learning to solve Wordle. 
 Obviously, using machine learning is not the most efficient way to play Wordle with code, 
-but it makes for a good example of a problem that _can_ be solved with an RL algorithm.
+but it makes for a good example of a problem that _might_ be solvable with an RL algorithm.
 
 I'm studying for the AWS AI/ML exam, and my preference is always to build something rather than 
 spend all day memorizing documentation.
@@ -62,7 +62,7 @@ There are many RL algorithms to choose from, but I think a DQN (Deep Q Network) 
 
 DQN: didn't work, due to large action space
 Actor-Critic: didn't work, due to predictions being floats instead of bytes in range 0-26
-A2C: ?
+A2C: ? Very fast but converges on a single word after finally seeing a reward
 
 Maybe what I need to do is split the problem into two problems.
 1. Train a model to learn english words. 
@@ -71,15 +71,27 @@ Maybe what I need to do is split the problem into two problems.
 Hard to do 1 without cheating though. I could build a custom environment that would help 
 it learn english, but how different is that from simply sampling from known words?
 
-Maybe learing needs 2 phases, with different hyperparameters set. Set the learning to be 
+Maybe learning needs 2 phases, with different hyperparameters set. Set the learning to be 
 very slow at first, so it tries lot of random samples. Then learn faster once it starts 
 making accurate guesses.
+
+Using random digits, it will take an average of 18,000 guesses to get a single reward.
+And then probably some multiple of 11M experiments to start to understand which words 
+are valid. Once that training is done, that model could be used as the random sample, instead 
+of a truly random sample.
 
 ## Tutorials and Documentation to read
 
 I found [this](https://www.learndatasci.com/tutorials/reinforcement-q-learning-scratch-python-openai-gym/) to be a good introduction to Gym, but it uses a pre-existing environment. There are not many detailed tutorials on how to actually create an Environment from scratch, so I spent some time reading the source code for [Taxi-v3](https://github.com/openai/gym/blob/master/gym/envs/toy_text/taxi.py).
 
 The documentation at [https://www.gymlibrary.ml/](https://www.gymlibrary.ml/) is a good start, but the site at (https://gym.openai.com/)[https://gym.openai.com/] is nearly useless.
+
+- [Stable Baselines](https://stable-baselines.readthedocs.io/en/master/)
+- [Reinforcement Learning w/ Keras + OpenAI: DQNs](https://towardsdatascience.com/reinforcement-learning-w-keras-openai-dqns-1eed3a5338c)
+- [Reinforcement Q-Learning from Scratch in Python with OpenAI Gym](https://www.learndatasci.com/tutorials/reinforcement-q-learning-scratch-python-openai-gym/)
+- [Reinforcement Q-Learning from Scratch in Python with OpenAI Gym](https://www.tensorflow.org/agents/tutorials/0_intro_rl)
+- [Reinforcement Learning algorithms — an intuitive overview](https://smartlabai.medium.com/reinforcement-learning-algorithms-an-intuitive-overview-904e2dff5bbc)
+
 
 
 
