@@ -66,9 +66,9 @@ plugged into any Gym environment.
 
 There are many RL algorithms to choose from, but I thought a DQN (Deep Q Network) is what I wanted. It is commonly used in RL tutorials as a way to play Atari games, which are not an exact analogy to Wordle, but one important commonality is that the model needs a memory of past states and actions. I need the algorithm to know that if it got yellows or greens on prior tries, it should re-use those letters. And I also need it to develop a sense for good starting words.
 
-DQN (`dqn.py`): didn't work, due to large action space
-Actor-Critic (`ac.py`): didn't work, due to predictions being floats instead of bytes in range 0-26
-A2C (`torch_a2c.py`): ? Very fast but converges on a single word after finally seeing a reward
+- DQN (`dqn.py`): didn't work, due to large action space
+- Actor-Critic (`ac.py`): didn't work, due to predictions being floats instead of bytes in range 0-26
+- A2C (`torch_a2c.py`): ? Very fast but converges on a single word after finally seeing a reward
 
 Maybe what I need to do is split the problem into two problems.
 1. Train a model to learn english words. 
