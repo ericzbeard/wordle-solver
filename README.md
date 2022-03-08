@@ -7,6 +7,8 @@ but it makes for a good example of a problem that _might_ be solvable with an RL
 I'm studying for the AWS AI/ML exam, and my preference is always to build something rather than 
 spend all day memorizing documentation.
 
+This readme is more of a stream-of-consciousness than proper documentation, so bear with me.
+
 *The Rules*:
 
 * I can’t pre-program English words into the system
@@ -46,7 +48,7 @@ observation, reward, done, info = env.step(action)
 ```
 
 That line of code is the primary function of an environment. Your algorithm makes an action, 
-in this case an array of letters, and it receives in return a observation of the environment ater that action. It also gets a reward or a penalty, depending on how well it did.
+in this case an array of letters, and it receives in return a observation of the environment after that action. It also gets a reward or a penalty, depending on how well it did.
 
 ## Frameworks
 
@@ -56,13 +58,17 @@ does not support `MultiDiscrete`: [https://github.com/IntelLabs/coach/issues/176
 
 AWS supports [Tensorflow](https://www.tensorflow.org/), MXNet, and Pytorch. Which one to use? They all seem to have pros and cons but from a few searches, it's obvious that Tensorflow has the best documentation, examples, and community support. My goal here is to find an algorithm that is already implemented and "simply" plug it in to my environment. It didn't take much reading to see that [Keras](https://keras.io/) is a popular high level API for interacting with Tensorflow. And tensorflow can run models in the browser, which might make it easier to implement a demo for my Wordle solver.
 
+Then again, PyTorch has [stable baselines](https://stable-baselines.readthedocs.io/en/master/), 
+which is a nice library of algorithms that are ready to be 
+plugged into any Gym environment.
+
 ## Algorithms
 
-There are many RL algorithms to choose from, but I think a DQN (Deep Q Network) is what I want. It is commonly used in RL tutorials as a way to play Atari games, which are not an exact analogy to Wordle, but one important commonality is that the model needs a memory of past states and actions. I need the algorithm to know that if it got yellows or greens on prior tries, it should re-use those letters. And I also need it to develop a sense for good starting words.
+There are many RL algorithms to choose from, but I thought a DQN (Deep Q Network) is what I wanted. It is commonly used in RL tutorials as a way to play Atari games, which are not an exact analogy to Wordle, but one important commonality is that the model needs a memory of past states and actions. I need the algorithm to know that if it got yellows or greens on prior tries, it should re-use those letters. And I also need it to develop a sense for good starting words.
 
-DQN: didn't work, due to large action space
-Actor-Critic: didn't work, due to predictions being floats instead of bytes in range 0-26
-A2C: ? Very fast but converges on a single word after finally seeing a reward
+DQN (`dqn.py`): didn't work, due to large action space
+Actor-Critic (`ac.py`): didn't work, due to predictions being floats instead of bytes in range 0-26
+A2C (`torch_a2c.py`): ? Very fast but converges on a single word after finally seeing a reward
 
 Maybe what I need to do is split the problem into two problems.
 1. Train a model to learn english words. 
