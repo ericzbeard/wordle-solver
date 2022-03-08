@@ -80,6 +80,10 @@ And then probably some multiple of 11M experiments to start to understand which 
 are valid. Once that training is done, that model could be used as the random sample, instead 
 of a truly random sample.
 
+Starting to work on this in `valid.py`, which establishes a list of valid actions based on 
+a large number of quick iterations to discover valid first actions. `ValidActions.sample()` 
+could be substituted for the "random" choice when a deep learning algorithm is exploring.
+
 ## Tutorials and Documentation to read
 
 I found [this](https://www.learndatasci.com/tutorials/reinforcement-q-learning-scratch-python-openai-gym/) to be a good introduction to Gym, but it uses a pre-existing environment. There are not many detailed tutorials on how to actually create an Environment from scratch, so I spent some time reading the source code for [Taxi-v3](https://github.com/openai/gym/blob/master/gym/envs/toy_text/taxi.py).
